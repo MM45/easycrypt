@@ -408,6 +408,9 @@ end = struct
     | LvMapOnNonAssign ->
         msg "map-style left-value cannot be used with assignments"
 
+    | ProcAssign f ->
+        msg "`%a' is a procedure name. Assign its result to a variable using `<@` instead" pp_qsymbol f
+
   let pp_restr_error env fmt (w, e) =
     let ppe = EcPrinting.PPEnv.ofenv env in
     let pp_v fmt xp = EcPrinting.pp_pv ppe fmt (pv_glob xp) in
