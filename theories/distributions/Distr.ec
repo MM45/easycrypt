@@ -1802,6 +1802,24 @@ move=> da_uni db_uni [a b] [a' b']; rewrite !supp_dprod !dprod1E /=.
 by case=> /da_uni ha /db_uni hb [/ha-> /hb->].
 qed.
 
+lemma dprod_uni_nn (da : 'a distr) (db : 'b distr):
+  0%r < weight da => 0%r < weight db =>
+  is_uniform (da `*` db) <=> is_uniform da /\ is_uniform db.
+proof.
+rewrite 2!witness_support => -[a [_ ain]] [b [_ bin]].
+split => [|[]]; 2: by apply dprod_uni.
+rewrite &(contraLR) negb_and /is_uniform ?negb_forall /=.
+elim; elim => [a' | b'].
++ rewrite negb_forall /= => -[a''] /=.
+  rewrite 2!negb_imply => [#] apin appin neqmu1a.
+  exists (a', b); rewrite negb_forall /=; exists (a'', b).
+  by rewrite 2!negb_imply 2!supp_dprod 2!dprod1E /= /#.
+rewrite negb_forall /= => -[b''] /=.
+rewrite 2!negb_imply => [#] bpin bppin neqmu1a.
+exists (a, b'); rewrite negb_forall /=; exists (a, b'').
+by rewrite 2!negb_imply 2!supp_dprod 2!dprod1E /= /#.
+qed.
+
 lemma dprod_funi (da : 'a distr) (db : 'b distr):
   is_funiform da => is_funiform db => is_funiform (da `*` db).
 proof.
