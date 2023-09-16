@@ -859,7 +859,9 @@ module Ax = struct
   let bind ?(import = EcTheory.import0) (scope : scope) ((x, ax) : _ * axiom) =
     assert (scope.sc_pr_uc = None);
     let item = EcTheory.mkitem import (EcTheory.Th_axiom (x, ax)) in
-    { scope with sc_env = EcSection.add_item item scope.sc_env }
+    { scope with
+        sc_env = EcSection.add_item item scope.sc_env;
+        sc_doc = DocState.promote_temporary scope.sc_doc "axiom"}
 
   (* ------------------------------------------------------------------ *)
   let start_lemma scope (cont, axflags) check ?name (axd, ctxt) =
@@ -1495,7 +1497,9 @@ module Mod = struct
   let bind ?(import = EcTheory.import0) (scope : scope) (m : top_module_expr) =
     assert (scope.sc_pr_uc = None);
     let item = EcTheory.mkitem import (EcTheory.Th_module m) in
-    { scope with sc_env = EcSection.add_item item scope.sc_env }
+    { scope with
+        sc_env = EcSection.add_item item scope.sc_env;
+        sc_doc = DocState.promote_temporary scope.sc_doc "module"; }
 
   let add_concrete (scope : scope) lc (ptm : pmodule_def) =
     assert (scope.sc_pr_uc = None);
@@ -1556,7 +1560,9 @@ module ModType = struct
   =
     assert (scope.sc_pr_uc = None);
     let item = EcTheory.mkitem import (EcTheory.Th_modtype (x, tysig)) in
-    { scope with sc_env = EcSection.add_item item scope.sc_env }
+    { scope with
+        sc_env = EcSection.add_item item scope.sc_env;
+        sc_doc = DocState.promote_temporary scope.sc_doc "moduletype"; }
 
   let add (scope : scope) (intf : pinterface) =
     assert (scope.sc_pr_uc = None);
@@ -1585,7 +1591,9 @@ module Ty = struct
   let bind ?(import = EcTheory.import0) (scope : scope) ((x, tydecl) : (_ * tydecl)) =
     assert (scope.sc_pr_uc = None);
     let item = EcTheory.mkitem import (EcTheory.Th_type (x, tydecl)) in
-    { scope with sc_env = EcSection.add_item item scope.sc_env }
+    { scope with
+        sc_env = EcSection.add_item item scope.sc_env;
+        sc_doc = DocState.promote_temporary scope.sc_doc "type"; }
 
   (* ------------------------------------------------------------------ *)
   let add scope (tyd : ptydecl located) =
@@ -1631,7 +1639,9 @@ module Ty = struct
   let bindclass ?(import = EcTheory.import0) (scope : scope) (x, tc) =
     assert (scope.sc_pr_uc = None);
     let item = EcTheory.mkitem import (EcTheory.Th_typeclass(x, tc)) in
-    { scope with sc_env = EcSection.add_item item scope.sc_env }
+    { scope with
+        sc_env = EcSection.add_item item scope.sc_env;
+        sc_doc = DocState.promote_temporary scope.sc_doc "typeclass"}
 
   (* ------------------------------------------------------------------ *)
   let add_class (scope : scope) { pl_desc = tcd } =
@@ -1994,7 +2004,8 @@ module Theory = struct
   let bind (scope : scope) (x, cth) =
     assert (scope.sc_pr_uc = None);
     { scope with
-        sc_env = EcSection.add_th ~import:EcTheory.import0 x cth scope.sc_env }
+        sc_env = EcSection.add_th ~import:EcTheory.import0 x cth scope.sc_env;
+        sc_doc = DocState.promote_temporary scope.sc_doc "theory"; }
 
   (* ------------------------------------------------------------------ *)
   let required (scope : scope) (name : required_info) =
